@@ -1,3 +1,24 @@
 ---
 
-###
+- name: Get monitor value
+  command: aws sqs --profile {{aws_profile_name}}  get-queue-attributes --queue-url {{sqs_base_url}}/{{item.name}} --attribute-names ApproximateNumberOfMessages
+  register: sqs_result
+
+- name: "Get monitor value"
+  set_fact:
+    monitor_value: "{{ sqs_result.stdout | from_json | json_query('values(@)[0].ApproximateNumberOfMessages') }}"
+
+- name: "Monitor status - OK"
+  debug: msg="STATUS:OK - QUEUE:{{ item.name }},TEAM:{{ item.team }} has {{ monitor_value  }} messages"
+  when: monitor_value < "10"
+
+- name: "Monitor Status - ALERT"
+  debug: msg="STATUS:ALERT - QUEUE:{{ item.name }},TEAM:{{ item.team }} has {{ monitor_value  }} messages - Sending alert to {{ monitor_group[0].members + ', ' + monitor_group[1].members }}"
+  when: monitor_value > "10"
+
+
+# Can replace DEBUG statement in the ALERT statement with command module - making use of commands for creating real monitors
+# Example:
+#  Cloudwatch: https://docs.aws.amazon.com/cli/latest/reference/cloudwatch/put-metric-alarm.html
+#    (Issue: Existing IAM creds doesn't has permissions for cloudwatch)
+#  Datadog: https://docs.datadoghq.com/api/?lang=python#monitors

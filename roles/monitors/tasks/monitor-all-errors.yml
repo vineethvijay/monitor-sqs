@@ -1,31 +1,5 @@
 ---
 
-#- name: Print queues
-#  debug:
-#    msg: "{{ item }}"
-#
-#- name: "Display queue-name of type:error"
-#  debug:
-#    var: item
-#  loop: "{{ queue | json_query(query) }}"
-#  vars:
-#    query: "[?type=='error'].name"
-
-#- name: "Populate queue-name + notification list"
-#  set_fact:
-#    populated_result: "{{ populated_result|default([]) + [{'name': item, 'notification_list': monitor_group[1].members }] }}"
-#  loop: "{{ queue | json_query(query) }}"
-#  vars:
-#    query: "[?type=='error'].name"
-
-#- name: Print queues
-#  debug:
-#    msg: "{{ populated_result }}"
-
-
-#final
-
-
 - name: Get monitor value
   command: aws sqs --profile {{aws_profile_name}}  get-queue-attributes --queue-url {{sqs_base_url}}/{{item.name}} --attribute-names ApproximateNumberOfMessages
   register: sqs_result
@@ -35,14 +9,17 @@
     monitor_value: "{{ sqs_result.stdout | from_json | json_query('values(@)[0].ApproximateNumberOfMessages') }}"
 
 - name: "Monitor status - OK"
-  debug: msg="STATUS:OK - QUEUE:{{ item.name }} has {{ monitor_value  }} error messages"
+  debug: msg="STATUS:OK - QUEUE:{{ item.name }},TEAM:{{ item.team }} has {{ monitor_value  }} error messages"
   when: monitor_value == "0"
 
 - name: "Monitor Status - ALERT"
-  debug: msg="STATUS:ALERT - QUEUE:{{ item.name }} has {{ monitor_value  }} error messages - Sending alert to {{ monitor_group[0].members + ', ' + monitor_group[1].members + ', ' + monitor_group[2].members}}"
+  debug: msg="STATUS:ALERT - QUEUE:{{ item.name }},TEAM:{{ item.team }} has {{ monitor_value  }} error messages - Sending alert to {{ monitor_group[0].members + ', ' + monitor_group[1].members + ', ' + monitor_group[2].members }}"
   when: monitor_value > "0"
 
-#
-#- name: Create cloudwatch monitor
-#  command: aws cli create-monitor add-alarm --name=name --threshold=<value> conditon=">", notification-list="team1"
+
+# Can replace DEBUG statement in the ALERT statement with command module - making use of commands for creating real monitors
+# Example:
+#  Cloudwatch: https://docs.aws.amazon.com/cli/latest/reference/cloudwatch/put-metric-alarm.html
+#    (Issue: Existing IAM creds doesn't has permissions for cloudwatch)
+#  Datadog: https://docs.datadoghq.com/api/?lang=python#monitors
 

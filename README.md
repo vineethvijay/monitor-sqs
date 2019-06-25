@@ -6,8 +6,9 @@ Automated monitoring for distributed SQS queues using Ansible
 Requirements
 ------------
 
-* AWS CLI installed, Configure a named profile with AWS Credentials. Refer https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html#cli-quick-configuration
-* Complete variable `sqs_base_url` with ***AWS Account ID***
+* AWS CLI installed, Configure a named profile with AWS Credentials & set profile name under role defaults.
+Refer https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html#cli-quick-configuration
+* Complete the variable `sqs_base_url` under role defaults with ***AWS Account ID***
 
 Role Variables
 --------------
