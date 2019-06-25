@@ -1,2 +1,30 @@
 ---
 # defaults file for monitors
+
+#queue_name should match the aws sqs queue name
+
+aws_profile_name: test-sqs
+sqs_base_url: https://eu-west-1.queue.amazonaws.com/<AWS-ACCOUNT-ID>
+
+queue:
+  - name: test_devops_makelaars
+    team: team1
+    type: standard
+  - name: test_devops_makelaars_errors
+    team: team2
+    type: error
+  - name: test_devops_new_houses
+    team: team3
+    type: standard
+  - name: test_devops_new_houses_errors
+    team: team3
+    type: error
+
+
+monitor_group:
+  - name: team1
+    members: "name1@host.com, name2@host.com"
+  - name: team2
+    members: "name3@host.com, name4@host.com"
+  - name: team3
+    members: "name5@host.com, name6@host.com"
