@@ -1,27 +1,25 @@
 ---
-# tasks file for monitors
 
-#- name: Print queues
-#  debug:
-#    msg: "{{ queue }}"
-
-#- name: Print monitor groups
-#  debug:
-#    msg: "{{ monitor_group }}"
-
-
-#- debug: msg="AWS_DEFAULT_PROFILE - {{ lookup('env','AWS_DEFAULT_PROFILE') }}"
-
-
-- name: "Create monitor for all errors"
+- name: "Create monitors for all errors"
   include_tasks: monitor-all-errors.yml
   loop: "{{ queue | json_query(query) }}"
   vars:
     query: "[?type=='error']"
 
-#
-#- include_tasks: monitor-team1-2.yml
-#  static: no
-#
-#- include_tasks: monitor-team3.yml
-#  static: no
+- name: "Create monitor for test_devops_new_houses queue"
+  include_tasks: monitor-team1-2.yml
+  loop: "{{ queue | json_query(query) }}"
+  vars:
+    query: "[?name=='test_devops_new_houses']"
+
+- name: "Create monitor for test_devops_makelaars queue"
+  include_tasks: monitor-team1-2.yml
+  loop: "{{ queue | json_query(query) }}"
+  vars:
+    query: "[?name=='test_devops_makelaars']"
+
+- name: "Create monitors for team3"
+  include_tasks: monitor-team3.yml
+  loop: "{{ queue | json_query(query) }}"
+  vars:
+    query: "[?type=='standard']"

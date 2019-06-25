@@ -7,19 +7,45 @@ aws_profile_name: test-sqs
 sqs_base_url: https://eu-west-1.queue.amazonaws.com/<AWS-ACCOUNT-ID>
 
 queue:
+  #team1
   - name: test_devops_makelaars
     team: team1
     type: standard
   - name: test_devops_makelaars_errors
-    team: team2
+    team: team1
     type: error
+  #team2
   - name: test_devops_new_houses
-    team: team3
+    team: team2
     type: standard
   - name: test_devops_new_houses_errors
+    team: team2
+    type: error
+  - name: test_devops_edited_houses
+    team: team2
+    type: standard
+  - name: test_devops_edited_houses_errors
+    team: team2
+    type: error
+  - name: test_devops_removed_houses
+    team: team2
+    type: standard
+  - name: test_devops_removed_houses_errors
+    team: team2
+    type: error
+  #team3
+  - name: test_devops_stats_phone_clicks
+    team: team3
+    type: standard
+  - name: test_devops_stats_phone_clicks_errors
     team: team3
     type: error
-
+  - name: test_devops_stats_facebook_clicks
+    team: team3
+    type: standard
+  - name: test_devops_stats_facebook_clicks_errors
+    team: team3
+    type: error
 
 monitor_group:
   - name: team1
