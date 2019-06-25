@@ -4,7 +4,7 @@
 #queue_name should match the aws sqs queue name
 
 aws_profile_name: test-sqs
-sqs_base_url: https://eu-west-1.queue.amazonaws.com/<AWS-ACCOUNT-ID>
+sqs_base_url: https://eu-west-1.queue.amazonaws.com/775912293446
 
 queue:
   #team1

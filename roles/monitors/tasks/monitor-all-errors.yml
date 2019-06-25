@@ -1,6 +1,6 @@
 ---
 
-- name: Get monitor value
+- name: "Running aws cli to fetch sqs Attribute Info"
   command: aws sqs --profile {{aws_profile_name}}  get-queue-attributes --queue-url {{sqs_base_url}}/{{item.name}} --attribute-names ApproximateNumberOfMessages
   register: sqs_result
 
